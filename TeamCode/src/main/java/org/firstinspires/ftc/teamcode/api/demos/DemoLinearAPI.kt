@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.api.demos
 
 import com.qualcomm.robotcore.util.Range
-import org.firstinspires.ftc.teamcode.api.TriWheels
 import org.firstinspires.ftc.teamcode.core.API
 import kotlin.math.atan2
 import kotlin.math.sqrt

@@ -1,46 +1,90 @@
-package org.firstinspires.ftc.teamcode.teleop
+package org.firstinspires.ftc.robotcontroller.external.samples
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import org.firstinspires.ftc.teamcode.RobotConfig
-import org.firstinspires.ftc.teamcode.api.TriWheels
-import kotlin.math.PI
-import kotlin.math.atan2
-import kotlin.math.sqrt
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 
-
-@TeleOp(name = "TeleOpMain")
-
-class TeleOpMain : OpMode() {
-
-
+/*
+ * This OpMode executes a Tank Drive control TeleOp a direct drive robot
+ * The code is structured as an Iterative OpMode
+ *
+ * In this mode, the left and right joysticks control the left and right motors respectively.
+ * Pushing a joystick forward will make the attached motor drive forward.
+ * It raises and lowers the claw using the Gamepad Y and A buttons respectively.
+ * It also opens and closes the claws slowly using the left and right Bumper buttons.
+ *
+ * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
+ */
+@TeleOp(name = "Robot: Teleop Tank", group = "Robot")
+class RobotTeleopTank_Iterative : OpMode() {
+    /* Declare OpMode members. */
+    val OUTTAKE_POWER: Double = 0.50 // Run outtake motor at 50% power
+    lateinit var leftDrive: DcMotor
+    lateinit var rightDrive: DcMotor
+    lateinit var outtake: DcMotor
+    lateinit var preOuttake1: Servo
+    lateinit var preOuttake2: Servo
+    /*
+     * Code to run ONCE when the driver hits INIT
+     */
     override fun init() {
-        TriWheels.init(this)
+        // Define and Initialize Motors
+        leftDrive = hardwareMap.get(DcMotor::class.java, "left_drive")
+        rightDrive = hardwareMap.get(DcMotor::class.java, "right_drive")
+        outtake = hardwareMap.get(DcMotor::class.java, "outtake")
+        preOuttake1 = hardwareMap.get(Servo::class.java, "pre_outtake1")
+        preOuttake2 = hardwareMap.get(Servo::class.java, "pre_outtake2")
+        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
+        // Pushing the left and right sticks forward MUST make robot go forward. So adjust these two lines based on your first test drive.
+        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+        leftDrive.direction = DcMotorSimple.Direction.REVERSE
+        rightDrive.direction = DcMotorSimple.Direction.FORWARD
+        // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
+        // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData(">", "Robot Ready.  Press START.") //
     }
 
+
+    /*
+     * Code to run REPEATEDLY after the driver hits START but before they hit STOP
+     */
     override fun loop() {
-        // joystick(Movement) input
-        val joyX = this.gamepad1.left_stick_x.toDouble()
-        val joyY = -this.gamepad1.left_stick_y.toDouble()
+        val leftWheel: Double
+        val rightWheel: Double
 
+        // Run wheels in tank mode (note: The joystick goes negative when pushed forward, so negate it)
+        leftWheel = -gamepad1.left_stick_y.toDouble()
+        rightWheel = -gamepad1.right_stick_y.toDouble()
+        leftDrive.setPower(leftWheel)
+        rightDrive.setPower(rightWheel)
 
-        // PI / 3 because 0 radians is right, not forward
-        val joyRadians = atan2(joyY, joyX) - (PI / 3.0) - (2.0 * PI / 3.0)
+        // Move both servos to new position.  Assume servos are mirror image of each other.
 
-        val joyMagnitude = sqrt(joyY * joyY + joyX * joyX)
+        if(gamepad1.a) {
+            outtake.setPower(OUTTAKE_POWER)
+        }
+        else{
+            outtake.setPower(0.0)
+        }
 
-        val rotationPower = this.gamepad1.right_stick_x.toDouble()
+        if (gamepad1.dpad_up){
+            preOuttake1.direction = Servo.Direction.FORWARD
+            preOuttake2.direction = Servo.Direction.REVERSE}
+        else{
+            preOuttake1.position = 0.5
+            preOuttake2.position = 0.5
+        }
 
-
-        // movement of all wheels
-        TriWheels.drive(
-            joyRadians,
-            joyMagnitude * RobotConfig.TeleOpMain.DRIVE_SPEED,
-            rotation = rotationPower * RobotConfig.TeleOpMain.ROTATE_SPEED,
-        )
-
-        telemetry.update()
-
-
+        // Send telemetry message to signify robot running;
+        telemetry.addData("leftDrive", "%.2f", leftDrive)
+        telemetry.addData("rightDrive", "%.2f", rightDrive)
     }
+
 }
