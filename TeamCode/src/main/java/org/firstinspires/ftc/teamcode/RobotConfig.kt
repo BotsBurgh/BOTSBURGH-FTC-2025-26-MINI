@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.core.logging.Level
 import java.io.File
 import kotlin.math.PI
 
-private val acmerobotics: Any
 
 /**
  * This is an immutable object representing robot configuration.

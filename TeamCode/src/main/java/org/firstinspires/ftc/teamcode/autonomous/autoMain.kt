@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
 import kotlin.math.abs
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+
+
 @Autonomous(name = "Robot: Auto Drive By Encoder", group = "Robot")
 class RobotAutoDriveByEncoder_Linear : LinearOpMode() {
     /* Declare OpMode members. */
@@ -46,8 +48,10 @@ class RobotAutoDriveByEncoder_Linear : LinearOpMode() {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED, 48.0, 48.0, 5.0) // S1: Forward 47 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED, -48.0, -48.0, 5.0) // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, 48.0, 48.0, 5.0) // S1: Forward 48 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED, -48.0, -48.0, 5.0) // S2: Reverse 48 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED, 36.0, 36.0, 5.0) // S3: Forward 36 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,-36.0,-36.0,5.0)
         telemetry.addData("Path", "Complete")
         telemetry.update()
         sleep(1000) // pause to display final telemetry message.
@@ -133,5 +137,8 @@ class RobotAutoDriveByEncoder_Linear : LinearOpMode() {
                 (WHEEL_DIAMETER_INCHES * 3.1415)
         const val DRIVE_SPEED: Double = 0.6
         const val TURN_SPEED: Double = 0.5
+    }
+    private fun runAuto(){
+
     }
 }

@@ -18,13 +18,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-@TeleOp(name = "Robot: Teleop Tank", group = "Robot")
 class RobotTeleopTank_Iterative : OpMode() {
     /* Declare OpMode members. */
     val OUTTAKE_POWER: Double = 0.50 // Run outtake motor at 50% power
     lateinit var leftDrive: DcMotor
     lateinit var rightDrive: DcMotor
-    lateinit var outtake: DcMotor
+    lateinit var outtakeMotor: DcMotor
     lateinit var preOuttake1: Servo
     lateinit var preOuttake2: Servo
     /*
@@ -32,9 +31,9 @@ class RobotTeleopTank_Iterative : OpMode() {
      */
     override fun init() {
         // Define and Initialize Motors
-        leftDrive = hardwareMap.get(DcMotor::class.java, "left_drive")
-        rightDrive = hardwareMap.get(DcMotor::class.java, "right_drive")
-        outtake = hardwareMap.get(DcMotor::class.java, "outtake")
+        leftDrive = hardwareMap.get(DcMotor::class.java, "leftDrive")
+        rightDrive = hardwareMap.get(DcMotor::class.java, "rightDrive")
+        outtakeMotor = hardwareMap.get(DcMotor::class.java, "outtakeMotor")
         preOuttake1 = hardwareMap.get(Servo::class.java, "pre_outtake1")
         preOuttake2 = hardwareMap.get(Servo::class.java, "pre_outtake2")
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -68,15 +67,15 @@ class RobotTeleopTank_Iterative : OpMode() {
         // Move both servos to new position.  Assume servos are mirror image of each other.
 
         if(gamepad1.a) {
-            outtake.setPower(OUTTAKE_POWER)
+            outtakeMotor.setPower(OUTTAKE_POWER)
         }
         else{
-            outtake.setPower(0.0)
+            outtakeMotor.setPower(0.0)
         }
 
         if (gamepad1.dpad_up){
             preOuttake1.direction = Servo.Direction.FORWARD
-            preOuttake2.direction = Servo.Direction.REVERSE}
+            preOuttake2.direction = Servo.Direction.FORWARD}
         else{
             preOuttake1.position = 0.5
             preOuttake2.position = 0.5
@@ -86,5 +85,4 @@ class RobotTeleopTank_Iterative : OpMode() {
         telemetry.addData("leftDrive", "%.2f", leftDrive)
         telemetry.addData("rightDrive", "%.2f", rightDrive)
     }
-
 }
