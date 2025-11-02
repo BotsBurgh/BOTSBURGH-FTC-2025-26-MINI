@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
-import org.firstinspires.ftc.teamcode.RobotConfig
 import org.firstinspires.ftc.teamcode.core.API
 import org.firstinspires.ftc.teamcode.utils.PI_2
 import org.firstinspires.ftc.teamcode.utils.Polar2d
@@ -37,6 +36,12 @@ object TriWheels : API() {
 
         stopAndResetMotors()
     }
+
+    fun pos(): Array<Double>{
+        val powers = arrayOf(red.power, green.power, blue.power)
+        return powers
+    }
+
 
     /**
      * Sets the power of each wheel respectively.
@@ -146,17 +151,4 @@ object TriWheels : API() {
     /** Returns an array containing [red], [green], and [blue]. */
     fun wheels() = arrayOf(this.red, this.green, this.blue)
 
-    fun halfSpeed(possible: Boolean){
-            if(possible) {
-                RobotConfig.TeleOpMain.ROTATE_SPEED /= RobotConfig.TeleOpMain.SPEED_MODIFIER
-                RobotConfig.TeleOpMain.DRIVE_SPEED /= RobotConfig.TeleOpMain.SPEED_MODIFIER
-            }
-    }
-
-    fun fullSpeed(possible: Boolean){
-        if(!possible) {
-            RobotConfig.TeleOpMain.ROTATE_SPEED *= RobotConfig.TeleOpMain.SPEED_MODIFIER
-            RobotConfig.TeleOpMain.DRIVE_SPEED *= RobotConfig.TeleOpMain.SPEED_MODIFIER
-        }
-    }
 }
