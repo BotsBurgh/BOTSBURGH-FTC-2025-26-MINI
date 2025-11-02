@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 /*
- * This OpMode executes a Tank Drive control TeleOp a direct drive robot
+ * This OpMode executes a   Tank Drive control TeleOp a direct drive robot
  * The code is structured as an Iterative OpMode
  *
  * In this mode, the left and right joysticks control the left and right motors respectively.
@@ -34,8 +34,8 @@ class RobotTeleopTank_Iterative : OpMode() {
         leftDrive = hardwareMap.get(DcMotor::class.java, "leftDrive")
         rightDrive = hardwareMap.get(DcMotor::class.java, "rightDrive")
         outtakeMotor = hardwareMap.get(DcMotor::class.java, "outtakeMotor")
-        preOuttake1 = hardwareMap.get(Servo::class.java, "pre_outtake1")
-        preOuttake2 = hardwareMap.get(Servo::class.java, "pre_outtake2")
+        preOuttake1 = hardwareMap.get(Servo::class.java, "preOuttake1")
+        preOuttake2 = hardwareMap.get(Servo::class.java, "preOuttake2")
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left and right sticks forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -75,7 +75,7 @@ class RobotTeleopTank_Iterative : OpMode() {
 
         if (gamepad1.dpad_up){
             preOuttake1.direction = Servo.Direction.FORWARD
-            preOuttake2.direction = Servo.Direction.FORWARD}
+            preOuttake2.direction = Servo.Direction.REVERSE}
         else{
             preOuttake1.position = 0.5
             preOuttake2.position = 0.5
@@ -85,4 +85,5 @@ class RobotTeleopTank_Iterative : OpMode() {
         telemetry.addData("leftDrive", "%.2f", leftDrive)
         telemetry.addData("rightDrive", "%.2f", rightDrive)
     }
+
 }
