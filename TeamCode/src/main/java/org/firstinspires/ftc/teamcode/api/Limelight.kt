@@ -16,16 +16,6 @@ object Limelight: API() {
         limelight.start()
         limelight.pipelineSwitch(0)
         val result = limelight.getLatestResult()
-        if (result != null && result.isValid()) {
-            val tx = result.tx
-            val ty = result.ty
-            val ta = result.ta
-            telemetry.addData("Target X", tx)
-            telemetry.addData("Target Y", ty)
-            telemetry.addData("Target Area", ta)
-        }
-        else{
-            telemetry.addData("Limelight","No Targets")
-        }
+
     }
 }

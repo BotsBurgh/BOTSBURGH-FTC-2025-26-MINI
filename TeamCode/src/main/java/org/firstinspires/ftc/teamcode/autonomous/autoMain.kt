@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.robotcontroller.external.samples
+ package org.firstinspires.ftc.robotcontroller.external.samples
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 
 @Autonomous(name = "Robot: Auto Drive By Encoder", group = "Robot")
-class RobotAutoDriveByEncoder_Linear : LinearOpMode() {
+class API : LinearOpMode() {
     /* Declare OpMode members. */
     lateinit var leftDrive: DcMotor
     lateinit var rightDrive: DcMotor
@@ -26,21 +26,15 @@ class RobotAutoDriveByEncoder_Linear : LinearOpMode() {
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftDrive.setDirection(DcMotorSimple.Direction.REVERSE)
-        rightDrive.setDirection(DcMotorSimple.Direction.FORWARD)
+        leftDrive.direction = DcMotorSimple.Direction.REVERSE
+        rightDrive.direction = DcMotorSimple.Direction.FORWARD
 
-        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
-        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
+        leftDrive.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        rightDrive.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
 
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
+        leftDrive.mode = DcMotor.RunMode.RUN_USING_ENCODER
+        rightDrive.mode = DcMotor.RunMode.RUN_USING_ENCODER
 
-        // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData(
-            "Starting at", "%7d :%7d",
-            leftDrive.getCurrentPosition(),
-            rightDrive.getCurrentPosition()
-        )
         telemetry.update()
 
         // Wait for the game to start (driver presses START)
@@ -52,19 +46,13 @@ class RobotAutoDriveByEncoder_Linear : LinearOpMode() {
         encoderDrive(DRIVE_SPEED, -48.0, -48.0, 5.0) // S2: Reverse 48 Inches with 5 Sec timeout
         encoderDrive(DRIVE_SPEED, 36.0, 36.0, 5.0) // S3: Forward 36 Inches with 5 Sec timeout
         encoderDrive(DRIVE_SPEED,-36.0,-36.0,5.0)
+        encoderDrive(DRIVE_SPEED, 36.0, -36.0,5.0)
         telemetry.addData("Path", "Complete")
         telemetry.update()
         sleep(1000) // pause to display final telemetry message.
     }
 
-    /*
-     *  Method to perform a relative move, based on encoder counts.
-     *  Encoders are not reset as the move is based on the current position.
-     *  Move will stop if any of three conditions occur:
-     *  1) Move gets to the desired position
-     *  2) Move runs out of time
-     *  3) Driver stops the OpMode running.
-     */
+
     fun encoderDrive(
         speed: Double,
         leftInches: Double, rightInches: Double,
@@ -85,13 +73,13 @@ class RobotAutoDriveByEncoder_Linear : LinearOpMode() {
             rightDrive.setTargetPosition(newRightTarget)
 
             // Turn On RUN_TO_POSITION
-            leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION)
-            rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+            leftDrive.mode = DcMotor.RunMode.RUN_TO_POSITION
+            rightDrive.mode = DcMotor.RunMode.RUN_TO_POSITION
 
             // reset the timeout time and start motion.
             runtime.reset()
-            leftDrive.setPower(abs(speed))
-            rightDrive.setPower(abs(speed))
+            leftDrive.power = abs(speed)
+            rightDrive.power = abs(speed)
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -104,17 +92,12 @@ class RobotAutoDriveByEncoder_Linear : LinearOpMode() {
             ) {
                 // Display it for the driver.
 
-                telemetry.addData("Running to", " %7d :%7d", newLeftTarget, newRightTarget)
-                telemetry.addData(
-                    "Currently at", " at %7d :%7d",
-                    leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition()
-                )
                 telemetry.update()
             }
 
             // Stop all motion;
-            leftDrive.setPower(0.0)
-            rightDrive.setPower(0.0)
+            leftDrive.power = 0.0
+            rightDrive.power = 0.0
 
             // Turn off RUN_TO_POSITION
             leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
@@ -124,12 +107,7 @@ class RobotAutoDriveByEncoder_Linear : LinearOpMode() {
         }
     }
     companion object {
-        // Calculate the COUNTS_PER_INCH for your specific drive train.
-        // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
-        // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
-        // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
-        // This is gearing DOWN for less speed and more torque.
-        // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
+          // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
         const val COUNTS_PER_MOTOR_REV: Double = 1440.0 // eg: TETRIX Motor Encoder
         const val DRIVE_GEAR_REDUCTION: Double = 1.0 // No External Gearing.
         const val WHEEL_DIAMETER_INCHES: Double = 4.0 // For figuring circumference
