@@ -2,9 +2,10 @@ package org.firstinspires.ftc.robotcontroller.external.samples
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import org.firstinspires.ftc.teamcode.TankDrive
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 
-
+@TeleOp(name = "teleOpMain", group = "Robot")
 class teleOpMain : OpMode() {
 
     override fun init() {

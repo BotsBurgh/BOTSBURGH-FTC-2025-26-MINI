@@ -2,9 +2,12 @@ package org.firstinspires.ftc.teamcode
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.robotcontroller.external.samples.teleOpMain
-import kotlin.math.pow
+import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.teamcode.api.TriWheels.red
+import org.firstinspires.ftc.teamcode.core.API
 
 object TankDrive : API() {
     // Define leftDrive, rightDrive, etc.
@@ -20,18 +23,18 @@ object TankDrive : API() {
     lateinit var preOuttake2: Servo
         private set
 
-    fun init(opMode: OpMode) {
+    override fun init(opMode: OpMode) {
 
         super.init(opMode)
 
-        leftDrive = hardwareMap.get(DcMotor::class.java, "leftDrive")
-        rightDrive = hardwareMap.get(DcMotor::class.java, "rightDrive")
-        outtakeMotor = hardwareMap.get(DcMotor::class.java, "outtakeMotor")
-        preOuttake1 = hardwareMap.get(Servo::class.java, "pre_outtake1")
-        preOuttake2 = hardwareMap.get(Servo::class.java, "pre_outtake2")
+        leftDrive = this.opMode.hardwareMap.get(DcMotorEx::class.java, "leftDrive")
+        rightDrive = this.opMode.hardwareMap.get(DcMotor::class.java, "rightDrive")
+        outtakeMotor = this.opMode.hardwareMap.get(DcMotor::class.java, "outtakeMotor")
+        preOuttake1 = this.opMode.hardwareMap.get(Servo::class.java, "pre_outtake1")
+        preOuttake2 = this.opMode.hardwareMap.get(Servo::class.java, "pre_outtake2")
 
 
-        telemetry.addData("Status", "Initialized - Ready to start")
+
     }
 
     fun power(drive: Double, turn: Double) {
